@@ -219,6 +219,74 @@ class Lastfm
     }
 
     /**
+     * Get an array with album information.
+     *
+     * @param string $artist
+     * @param string $album
+     * @param null|string $username Optional. If supplied, the user's playcount for this album is included in the response.
+     *
+     * @return Lastfm
+     */
+    public function albumInfo(string $artist, string $album, string $username = null): Lastfm
+    {
+        $this->query = array_merge($this->query, [
+            'method' => 'album.getInfo',
+            'artist' => $artist,
+            'album' => $album,
+            'user' => $username,
+        ]);
+
+        $this->pluck = 'album';
+
+        return $this;
+    }
+
+    /**
+     * Get an array with artist information.
+     *
+     * @param string $artist
+     * @param string|null $username Optional. If supplied, the user's playcount for this artist is included in the response.
+     *
+     * @return Lastfm
+     */
+    public function artistInfo(string $artist, string $username = null): Lastfm
+    {
+        $this->query = array_merge($this->query, [
+            'method' => 'artist.getInfo',
+            'artist' => $artist,
+            'user' => $username,
+        ]);
+
+        $this->pluck = 'artist';
+
+        return $this;
+    }
+
+
+    /**
+     * Get an array with artist information.
+     *
+     * @param string $artist
+     * @param string $track
+     * @param string|null $username Optional. If supplied, the user's playcount for this track is included in the response.
+     *
+     * @return Lastfm
+     */
+    public function trackInfo(string $artist, string $track, string $username = null): Lastfm
+    {
+        $this->query = array_merge($this->query, [
+            'method' => 'track.getInfo',
+            'artist' => $artist,
+            'track' => $track,
+            'user' => $username,
+        ]);
+
+        $this->pluck = 'track';
+
+        return $this;
+    }
+
+    /**
      * Retrieve the track that is currently playing or "false" if not
      * currently playing any track.
      *
@@ -288,6 +356,34 @@ class Lastfm
     public function page(int $page)
     {
         $this->query = array_merge($this->query ?? [], ['page' => $page]);
+
+        return $this;
+    }
+
+    /**
+     * Transform misspelled artist names into correct artist names, returning the correct version instead. (Optional parameter of the Last.fm API)
+     *
+     * @param bool $bool
+     *
+     * @return $this
+     */
+    public function autocorrect(bool $bool)
+    {
+        $this->query = array_merge($this->query ?? [], ['autocorrect' => (int) $bool]);
+
+        return $this;
+    }
+
+    /**
+     * Set or overwrite the language to return the biography (in artists/albums/tracks) in, expressed as an ISO 639 alpha-2 code. (Optional parameter of the Last.fm API)
+     *
+     * @param string $lang
+     *
+     * @return $this
+     */
+    public function lang(string $lang)
+    {
+        $this->query = array_merge($this->query ?? [], ['lang' => $lang]);
 
         return $this;
     }
