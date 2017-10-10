@@ -262,7 +262,6 @@ class Lastfm
         return $this;
     }
 
-
     /**
      * Get an array with track information.
      *
